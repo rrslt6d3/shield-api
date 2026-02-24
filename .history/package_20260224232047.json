@@ -1,0 +1,14 @@
+{
+  "name": "shield-api",
+  "version": "1.0.0",
+  "description": "Stripe to Supabase Automation",
+  "main": "api/webhook.js",
+  "scripts": {
+    "start": "node api/webhook.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.39.0",
+    "resend": "^3.2.0",
+    "stripe": "^14.14.0"
+  }
+}
