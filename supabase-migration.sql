@@ -40,8 +40,12 @@ ALTER TABLE license_keys ENABLE ROW LEVEL SECURITY;
 
 -- Allow anon read for basic validation (key_string + is_active check only)
 -- The validate-license endpoint uses service_role so this is just a safety net
-CREATE POLICY IF NOT EXISTS "Anon can check active keys" ON license_keys
-  FOR SELECT USING (is_active = true);
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_policies WHERE policyname = 'Anon can check active keys' AND tablename = 'license_keys') THEN
+    CREATE POLICY "Anon can check active keys" ON license_keys
+      FOR SELECT USING (is_active = true);
+  END IF;
+END $$;
 
 -- 6. Done! Verify:
 SELECT column_name, data_type FROM information_schema.columns
