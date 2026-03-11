@@ -1,7 +1,8 @@
 {
-  "name": "shield-api",
+  "name": "aditya-lens-api",
   "version": "1.0.0",
   "private": true,
+  "description": "Aditya Lens — Enterprise Data Intelligence Suite — Billing & License API",
   "dependencies": {
     "stripe": "^17.0.0",
     "@supabase/supabase-js": "^2.0.0",

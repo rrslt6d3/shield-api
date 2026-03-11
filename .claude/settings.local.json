@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find . -type f -name *.env*)",
+      "Bash(grep -r process.env /c/Projects/shield-api --include=*.js --include=*.html)"
+    ]
+  }
+}

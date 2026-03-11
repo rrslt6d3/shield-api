@@ -1,82 +1,147 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Shield Pro - Gatekeeper</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aditya Lens — License Activation</title>
   <style>
-    body { font-family: sans-serif; background: #0f172a; color: white; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-    #login-screen, #app-content { background: #1e293b; padding: 40px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); text-align: center; }
-    input { padding: 12px; width: 250px; border-radius: 6px; border: 1px solid #334155; background: #0f172a; color: white; margin-bottom: 20px; font-size: 16px; }
-    button { padding: 12px 24px; background: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; font-weight: bold; }
-    button:hover { background: #2563eb; }
-    #error-message { color: #ef4444; margin-top: 15px; min-height: 20px; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', -apple-system, sans-serif; background: #08081a; color: #e6edf3; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+    .card { background: #0f0f23; border: 1px solid #1e1e2e; border-radius: 16px; padding: 3rem; width: 440px; text-align: center; }
+    .logo { color: #c4a265; font-size: 1.6rem; font-weight: 800; letter-spacing: 2px; margin-bottom: .25rem; }
+    .subtitle { color: #6b6b8a; font-size: .8rem; letter-spacing: 1px; margin-bottom: 2rem; }
+    .gold-line { width: 60px; height: 2px; background: #c4a265; margin: 0 auto 2rem; border-radius: 1px; }
+    label { display: block; text-align: left; font-size: .75rem; color: #6b6b8a; text-transform: uppercase; letter-spacing: 1px; margin-bottom: .5rem; }
+    input { width: 100%; padding: 14px 16px; border-radius: 10px; border: 1px solid #2a2a3e; background: #08081a; color: #c4a265; font-family: 'Courier New', monospace; font-size: 1rem; letter-spacing: 2px; text-align: center; outline: none; transition: border-color .2s; }
+    input:focus { border-color: #c4a265; }
+    input::placeholder { color: #3d3d5c; letter-spacing: 1px; }
+    .btn { width: 100%; padding: 14px; background: linear-gradient(135deg, #c4a265, #d4b878); color: #08081a; border: none; border-radius: 10px; font-size: .95rem; font-weight: 700; cursor: pointer; letter-spacing: 1px; margin-top: 1.25rem; transition: opacity .2s; }
+    .btn:hover { opacity: .9; }
+    .btn:disabled { opacity: .5; cursor: not-allowed; }
+    .msg { min-height: 24px; margin-top: 1rem; font-size: .85rem; line-height: 1.4; }
+    .msg.error { color: #e74c3c; }
+    .msg.success { color: #2ecc71; }
+    .msg.checking { color: #c4a265; }
+    .tier-badge { display: inline-block; background: linear-gradient(135deg, #c4a265, #d4b878); color: #08081a; padding: 4px 14px; border-radius: 20px; font-weight: 700; font-size: .75rem; letter-spacing: 1px; margin-top: .5rem; }
+    .welcome { display: none; }
+    .welcome h2 { color: #fff; font-size: 1.3rem; margin-bottom: .5rem; }
+    .welcome .features { text-align: left; margin: 1.5rem 0; padding: 1rem; background: #0a0a1a; border-radius: 10px; border: 1px solid #1e1e2e; }
+    .welcome .features li { color: #c4c4d4; font-size: .85rem; margin-bottom: .5rem; list-style: none; padding-left: 1.25rem; position: relative; }
+    .welcome .features li::before { content: '\2713'; position: absolute; left: 0; color: #c4a265; font-weight: 700; }
+    .foot { margin-top: 2rem; font-size: .7rem; color: #3d3d5c; }
+    .foot a { color: #6b6b8a; text-decoration: none; }
   </style>
 </head>
 <body>
 
+<div class="card">
+  <!-- Login Screen -->
   <div id="login-screen">
-    <h2>Enter Your License Key 🛡️</h2>
-    <input type="text" id="license-input" placeholder="ADITYA-PRO-..." />
-    <br>
-    <button onclick="checkKey()">Unlock App</button>
-    <p id="error-message"></p>
+    <div class="logo">ADITYA LENS</div>
+    <div class="subtitle">Enterprise Data Intelligence Suite</div>
+    <div class="gold-line"></div>
+    <label for="license-input">License Key</label>
+    <input type="text" id="license-input" placeholder="AL-XXXX-XXXX-XXXX-XXXX" maxlength="24" autocomplete="off" spellcheck="false" />
+    <button class="btn" id="submit-btn" onclick="checkKey()">Activate License</button>
+    <div class="msg" id="msg"></div>
   </div>
 
-  <div id="app-content" style="display: none;">
-    <h2>Welcome to Shield Pro! ✅</h2>
-    <p>Your secure data environment is now activated and running.</p>
-    </div>
+  <!-- Welcome Screen -->
+  <div id="welcome-screen" class="welcome">
+    <div class="logo">ADITYA LENS</div>
+    <div class="gold-line"></div>
+    <h2>License Activated</h2>
+    <div class="tier-badge" id="tier-badge"></div>
+    <p style="color:#c4c4d4; margin-top:1rem; font-size:.9rem;" id="welcome-email"></p>
+    <ul class="features" id="feature-list"></ul>
+    <p style="color:#6b6b8a; font-size:.8rem; line-height:1.6;">Download and install the desktop app to get started. Your license key has been saved.</p>
+    <button class="btn" onclick="window.location.href='https://github.com/rrslt6d3/aditya-lens/releases/latest'" style="margin-top:1rem;">Download Aditya Lens</button>
+    <button class="btn" onclick="logout()" style="background:transparent; border:1px solid #2a2a3e; color:#6b6b8a; margin-top:.75rem;">Sign Out</button>
+  </div>
 
-  <script>
-    // 1. Give the browser the map to your database
-    // IMPORTANT: Make sure you paste your actual URL and Anon key back in here!
-    const supabaseUrl = 'https://qppnrcnkngzjkbpjdxyz.supabase.co';
-    const supabaseAnonKey = 'sb_publishable_tXOzLkrHDOZJKE3rLzhUXQ_-wUXnhAA';
-    
-    // FIX: We changed this to 'supabaseClient' so it doesn't fight the main tool
-    const supabaseClient = supabase.createClient(supabaseUrl, supabaseAnonKey);
+  <div class="foot">
+    <a href="https://adityalabs.ai">Aditya Labs</a> &nbsp;|&nbsp;
+    <a href="mailto:support@adityalabs.ai">Support</a>
+    <p style="margin-top:.5rem;">&copy; 2026 Aditya Labs. All rights reserved.</p>
+  </div>
+</div>
 
-    // 2. Check if they already unlocked it yesterday
-    window.onload = function() {
-      const savedKey = localStorage.getItem('shield_pro_key');
-      if (savedKey) {
-        verifyKey(savedKey);
-      }
-    };
+<script>
+  const API_BASE = window.location.origin;
+  const TIER_NAMES = { 1: "Solo", 2: "Professional", 3: "Business", 4: "Enterprise" };
+  const TIER_FEATURES = {
+    1: ["File & Content Search", "6 PII Detection Filters", "Dashboard & Analytics", "Duplicate Detection", "Bookmarks"],
+    2: ["All 15 PII Filters", "Text Redaction", "Custom Patterns & Profiles", "Compliance Center (7 Frameworks)", "PDF Audit Certificates", "Watch Folder", "AI Analysis"],
+    3: ["Image Redaction", "Batch Processing", "Document Compare", "Scan Statistics", "Scheduled Scans", "5 Seats / Devices"],
+    4: ["Audio Transcription & PII", "REST API Server", "RBAC & Team Management (25 Seats)", "Custom Frameworks", "Advanced Audit Trail", "Priority Support"],
+  };
 
-    // 3. The Bouncer: Reads the input box
-    async function checkKey() {
-      const inputKey = document.getElementById('license-input').value.trim();
-      if (!inputKey) return;
-      document.getElementById('error-message').innerText = "Checking...";
-      await verifyKey(inputKey);
-    }
+  window.onload = () => {
+    const savedKey = localStorage.getItem("aditya_lens_key");
+    if (savedKey) validateKey(savedKey);
+  };
 
-    // 4. Look inside the Supabase database
-    async function verifyKey(key) {
-      // FIX: Make sure this says 'supabaseClient' too!
-      const { data, error } = await supabaseClient
-        .from('license_keys')
-        .select('*')
-        .eq('key_string', key)
-        .eq('is_active', true)
-        .single();
+  async function checkKey() {
+    const key = document.getElementById("license-input").value.trim().toUpperCase();
+    if (!key) return;
+    await validateKey(key);
+  }
 
-      if (data) {
-        // VIP List Confirmed: Unlock the app
-        localStorage.setItem('shield_pro_key', key);
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('app-content').style.display = 'block';
+  async function validateKey(key) {
+    const msg = document.getElementById("msg");
+    const btn = document.getElementById("submit-btn");
+    msg.className = "msg checking";
+    msg.textContent = "Validating...";
+    btn.disabled = true;
+
+    try {
+      const resp = await fetch(`${API_BASE}/api/validate-license`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ license_key: key }),
+      });
+      const data = await resp.json();
+
+      if (data.valid) {
+        localStorage.setItem("aditya_lens_key", key);
+        showWelcome(data);
       } else {
-        // Fake or Expired Key
-        document.getElementById('error-message').innerText = "Invalid or expired license key.";
-        localStorage.removeItem('shield_pro_key');
-        document.getElementById('login-screen').style.display = 'block';
-        document.getElementById('app-content').style.display = 'none';
+        msg.className = "msg error";
+        msg.textContent = data.error || "Invalid license key.";
+        localStorage.removeItem("aditya_lens_key");
       }
+    } catch (err) {
+      msg.className = "msg error";
+      msg.textContent = "Connection error. Please try again.";
     }
-  </script>
+    btn.disabled = false;
+  }
+
+  function showWelcome(data) {
+    document.getElementById("login-screen").style.display = "none";
+    document.getElementById("welcome-screen").style.display = "block";
+    document.getElementById("tier-badge").textContent = `${data.tier_name} Plan`;
+    document.getElementById("welcome-email").textContent = data.customer_email || "";
+
+    // Build cumulative feature list
+    const list = document.getElementById("feature-list");
+    list.innerHTML = "";
+    for (let t = 1; t <= data.tier; t++) {
+      (TIER_FEATURES[t] || []).forEach(f => {
+        const li = document.createElement("li");
+        li.textContent = f;
+        list.appendChild(li);
+      });
+    }
+  }
+
+  function logout() {
+    localStorage.removeItem("aditya_lens_key");
+    document.getElementById("login-screen").style.display = "block";
+    document.getElementById("welcome-screen").style.display = "none";
+    document.getElementById("msg").textContent = "";
+    document.getElementById("license-input").value = "";
+  }
+</script>
 </body>
 </html>
