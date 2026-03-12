@@ -8,13 +8,13 @@ const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SER
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 // ── 4-Tier Pricing: Map Stripe Price IDs → Tier Levels ──────────────────────
-// UPDATE THESE with your actual Stripe price IDs for Aditya Lens
+// Set these as Vercel environment variables:
+// STRIPE_PRICE_SOLO, STRIPE_PRICE_PROFESSIONAL, STRIPE_PRICE_BUSINESS, STRIPE_PRICE_ENTERPRISE
 const PRICE_TO_TIER = {
-  "price_1T53tEC3tIcB9GFKoMpw0hPf": 1, // Solo £99/mo
-  "price_1T53u4C3tIcB9GFKvqKIFHAp": 2, // Professional £249/mo
-  "price_1T53uwC3tIcB9GFK1x8YfsTg": 3, // Business £499/mo
-  // Add your Enterprise price ID when created in Stripe:
-  // "price_ENTERPRISE_ID_HERE":       4, // Enterprise £999/mo
+  [process.env.STRIPE_PRICE_SOLO]:         1, // Solo £99/mo
+  [process.env.STRIPE_PRICE_PROFESSIONAL]: 2, // Professional £249/mo
+  [process.env.STRIPE_PRICE_BUSINESS]:     3, // Business £499/mo
+  [process.env.STRIPE_PRICE_ENTERPRISE]:   4, // Enterprise £999/mo
 };
 
 const TIER_NAMES  = { 1: "Solo", 2: "Professional", 3: "Business", 4: "Enterprise" };
