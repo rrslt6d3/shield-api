@@ -176,6 +176,103 @@ body{font-family:Inter,sans-serif;background:#08081a;color:#e6edf3;margin:0;padd
   });
 }
 
+async function sendGettingStartedEmail(customerEmail, customerName, tierName) {
+  await resend.emails.send({
+    from: "Aditya Lens <hello@adityalabs.ai>",
+    to: customerEmail,
+    subject: "Getting Started with Aditya Lens — Your Quick Start Guide",
+    html: `<!DOCTYPE html>
+<html><head><meta charset="utf-8"><style>
+body{font-family:Inter,Arial,sans-serif;background:#08081a;color:#e6edf3;margin:0;padding:0}
+.wrap{max-width:600px;margin:40px auto;background:#0f0f23;border:1px solid #1e1e2e;border-radius:16px;overflow:hidden}
+.hdr{background:linear-gradient(135deg,#1a1a2e,#2d1f4e,#1a1a2e);padding:2rem;text-align:center;border-bottom:2px solid #c4a265}
+.hdr h1{color:#c4a265;font-size:1.4rem;margin:0}
+.hdr p{color:rgba(196,162,101,.7);margin:.3rem 0 0;font-size:.85rem}
+.body{padding:2rem}
+.step-card{background:#0a0a1a;border:1px solid #1e1e2e;border-radius:12px;padding:1.25rem;margin:1rem 0}
+.step-num{display:inline-block;background:#c4a265;color:#08081a;width:28px;height:28px;border-radius:50%;text-align:center;line-height:28px;font-weight:700;font-size:.85rem;margin-right:10px}
+.step-title{color:#fff;font-weight:600;font-size:1rem}
+.step-desc{color:#a0a0b8;font-size:.88rem;margin:.5rem 0 0;line-height:1.6}
+.warn-box{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:10px;padding:1rem;margin:1.5rem 0}
+.warn-title{color:#EF4444;font-weight:700;font-size:.9rem;margin:0 0 .5rem}
+.warn-text{color:#c4c4d4;font-size:.85rem;line-height:1.6;margin:0}
+.tip-box{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.25);border-radius:10px;padding:1rem;margin:1rem 0}
+.tip-title{color:#22C55E;font-weight:700;font-size:.9rem;margin:0 0 .5rem}
+.tip-text{color:#c4c4d4;font-size:.85rem;line-height:1.6;margin:0}
+.btn{display:block;background:linear-gradient(135deg,#c4a265,#d4b878);color:#08081a;text-decoration:none;text-align:center;padding:.9rem;border-radius:10px;font-weight:700;font-size:.9rem;margin:1.5rem 0}
+.btn-outline{display:block;border:1px solid #c4a265;color:#c4a265;text-decoration:none;text-align:center;padding:.8rem;border-radius:10px;font-weight:600;font-size:.85rem;margin:.75rem 0}
+.foot{text-align:center;padding:1.5rem;border-top:1px solid #1e1e2e;font-size:.75rem;color:#6b6b8a}
+.foot a{color:#c4a265;text-decoration:none}
+</style></head><body>
+<div class="wrap">
+  <div class="hdr">
+    <h1>ADITYA LENS</h1>
+    <p>Quick Start Guide</p>
+  </div>
+  <div class="body">
+    <p style="color:#c4c4d4;margin:0 0 .5rem;line-height:1.6">Hi ${customerName},</p>
+    <p style="color:#c4c4d4;margin:0 0 1.5rem;line-height:1.6">Welcome to Aditya Lens ${tierName}! Here's everything you need to get up and running in under 5 minutes.</p>
+
+    <div class="step-card">
+      <span class="step-num">1</span><span class="step-title">Install the App</span>
+      <p class="step-desc">Download the .exe installer from GitHub. Run it — Windows may show a SmartScreen warning (see below). Choose your install location and click Install.</p>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">2</span><span class="step-title">Accept the EULA</span>
+      <p class="step-desc">On first launch, read and accept the End User License Agreement. Check the agreement box and click "Accept & Continue".</p>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">3</span><span class="step-title">Activate Your License</span>
+      <p class="step-desc">Go to <strong>Settings → License</strong>. Paste your license key (from your previous email) and click <strong>Activate License</strong>. Your ${tierName} features unlock instantly.</p>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">4</span><span class="step-title">Select a Folder to Scan</span>
+      <p class="step-desc">Click the drive letter in the top-right corner to pick a folder. Then go to the <strong>PII Scanner</strong> tab and click <strong>Scan</strong>. The app will find all sensitive data in your files.</p>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">5</span><span class="step-title">Review & Redact</span>
+      <p class="step-desc">Review findings sorted by risk level. Select files and click <strong>Redact</strong> to automatically replace sensitive data. Original files are backed up automatically.</p>
+    </div>
+
+    <div class="step-card">
+      <span class="step-num">6</span><span class="step-title">Generate Reports</span>
+      <p class="step-desc">Export PDF audit certificates, CSV reports, and check compliance against GDPR, HIPAA, PCI-DSS, and more from the <strong>Compliance</strong> tab.</p>
+    </div>
+
+    <div class="warn-box">
+      <div class="warn-title">⚠️ Windows SmartScreen Warning</div>
+      <p class="warn-text">Since the app isn't code-signed yet, Windows may show "Windows protected your PC". Click <strong>"More info"</strong> → <strong>"Run anyway"</strong>. This is normal for unsigned desktop apps and your data is 100% safe.</p>
+    </div>
+
+    <div class="warn-box">
+      <div class="warn-title">⚠️ License Activation Fails?</div>
+      <p class="warn-text">• Make sure you're connected to the internet (one-time check only)<br>• Copy the key exactly as shown — it's AL-XXXX-XXXX-XXXX-XXXX<br>• If you see "device limit reached", go to Settings → Manage Devices to free a slot<br>• Contact support@adityalabs.ai if problems persist</p>
+    </div>
+
+    <div class="tip-box">
+      <div class="tip-title">💡 Want AI Analysis? Install Ollama</div>
+      <p class="tip-text">For AI-powered risk assessment and compliance analysis, install <strong>Ollama</strong> (free) from ollama.com. Then run <code>ollama pull llama3</code> in your terminal. The AI indicator in the app turns green when ready. All AI processing is 100% local.</p>
+    </div>
+
+    <a href="https://adityalabs.ai/lens/guide" class="btn">Interactive Getting Started Guide →</a>
+    <a href="https://github.com/rrslt6d3/aditya-lens/releases/latest" class="btn-outline">Download Aditya Lens for Windows</a>
+
+    <p style="color:#6b6b8a;font-size:.82rem;line-height:1.6;margin:1.5rem 0 0">Questions? Reply to this email or contact <a href="mailto:support@adityalabs.ai" style="color:#c4a265">support@adityalabs.ai</a>. We're here to help.</p>
+  </div>
+  <div class="foot">
+    Aditya Lens by <a href="https://adityalabs.ai">Aditya Labs</a> &nbsp;|&nbsp;
+    <a href="https://adityalabs.ai/lens">Product Page</a> &nbsp;|&nbsp;
+    <a href="https://adityalabs.ai/lens/guide">Guide</a>
+    <p style="margin:.5rem 0 0;color:#3d3d5c">&copy; 2026 Aditya Labs. All rights reserved.</p>
+  </div>
+</div></body></html>`,
+  });
+}
+
 // ── Main Webhook Handler ────────────────────────────────────────────────────
 
 export default async function handler(req, res) {
@@ -227,6 +324,8 @@ export default async function handler(req, res) {
         }
 
         await sendLicenseEmail(customerEmail, customerName, licenseKey, tierLevel);
+        // Send getting started guide email (non-blocking)
+        sendGettingStartedEmail(customerEmail, customerName, TIER_NAMES[tierLevel]).catch(e => console.error("Getting started email failed:", e));
         console.log(`License issued: ${licenseKey} | Tier ${tierLevel} (${TIER_NAMES[tierLevel]}) | ${customerEmail}`);
         break;
       }
@@ -270,6 +369,7 @@ export default async function handler(req, res) {
         });
 
         await sendLicenseEmail(customer.email, customer.name || "Valued Customer", licenseKey, tierLevel);
+        sendGettingStartedEmail(customer.email, customer.name || "Valued Customer", TIER_NAMES[tierLevel]).catch(e => console.error("Getting started email failed:", e));
         console.log(`License issued (sub): ${licenseKey} | Tier ${tierLevel} | ${customer.email}`);
         break;
       }
