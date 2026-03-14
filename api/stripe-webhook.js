@@ -107,7 +107,11 @@ body{font-family:Inter,Arial,sans-serif;background:#08081a;color:#e6edf3;margin:
       <div class="step"><div class="num">4</div><div class="step-t">Click <strong>Activate License</strong> — features unlock instantly</div></div>
     </div>
     <a href="https://github.com/rrslt6d3/aditya-lens/releases/latest" class="btn">Download Aditya Lens for Windows</a>
-    <p style="color:#6b6b8a;font-size:.8rem;line-height:1.6">Keep this email safe. Need help? Contact <a href="mailto:support@adityalabs.ai" style="color:#c4a265">support@adityalabs.ai</a></p>
+    <div style="background:rgba(196,162,101,.08);border:1px solid rgba(196,162,101,.25);border-radius:10px;padding:1rem;margin:1rem 0">
+      <p style="color:#c4a265;font-weight:700;font-size:.85rem;margin:0 0 .4rem">⚠️ Important: Your license key IS your login</p>
+      <p style="color:#c4c4d4;font-size:.82rem;margin:0;line-height:1.6">Aditya Lens does not use a username or password. This license key is how you log in. If you log out or move to a new device, you will need this key to log back in. <strong>Keep this email safe.</strong></p>
+    </div>
+    <p style="color:#6b6b8a;font-size:.8rem;line-height:1.6">Need help? Contact <a href="mailto:support@adityalabs.ai" style="color:#c4a265">support@adityalabs.ai</a></p>
   </div>
   <div class="foot">
     Aditya Lens by <a href="https://adityalabs.ai">Aditya Labs</a> &nbsp;|&nbsp;
@@ -224,8 +228,8 @@ body{font-family:Inter,Arial,sans-serif;background:#08081a;color:#e6edf3;margin:
     </div>
 
     <div class="step-card">
-      <span class="step-num">3</span><span class="step-title">Activate Your License</span>
-      <p class="step-desc">Go to <strong>Settings → License</strong>. Paste your license key (from your previous email) and click <strong>Activate License</strong>. Your ${tierName} features unlock instantly.</p>
+      <span class="step-num">3</span><span class="step-title">Log In with Your License Key</span>
+      <p class="step-desc">Go to <strong>Settings → License</strong>. Paste your license key (from your previous email) and click <strong>Activate License</strong>. Your ${tierName} features unlock instantly. <strong>Note:</strong> Aditya Lens uses your license key as your login — there is no username or password. Keep your key email safe!</p>
     </div>
 
     <div class="step-card">
