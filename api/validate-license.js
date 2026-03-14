@@ -19,41 +19,52 @@ function checkRateLimit(ip) {
 }
 
 // ── Tier config ─────────────────────────────────────────────────────────────
-const TIER_NAMES   = { 1: "Solo", 2: "Professional", 3: "Business", 4: "Enterprise" };
-const TIER_DEVICES = { 1: 1, 2: 3, 3: 5, 4: 25 };
+const TIER_NAMES   = { 0: "Starter", 1: "Solo", 2: "Professional", 3: "Business", 4: "Enterprise" };
+const TIER_DEVICES = { 0: 1, 1: 1, 2: 3, 3: 10, 4: 25 };
 
 const TIER_FEATURES = {
-  1: {
+  0: {
     search: true, content_search: true, pii_filters: 6, dashboard: true,
-    analytics: true, duplicates: true, bookmarks: true,
-    redaction: false, compliance: false, ai_analysis: false, watch_folder: false,
+    analytics: true, duplicates: true, bookmarks: true, redaction: true,
+    compliance: false, ai_analysis: false, watch_folder: false,
+    batch: false, image_redact: false, schedules: false,
+    audio: false, api_server: false, rbac: false, custom_frameworks: false,
+  },
+  1: {
+    search: true, content_search: true, pii_filters: 15, dashboard: true,
+    analytics: true, duplicates: true, bookmarks: true, redaction: true,
+    compliance: true, ai_analysis: true, watch_folder: true,
+    custom_patterns: true, profiles: true, pdf_audit: true, regex_playground: true,
     batch: false, image_redact: false, schedules: false,
     audio: false, api_server: false, rbac: false, custom_frameworks: false,
   },
   2: {
     search: true, content_search: true, pii_filters: 15, dashboard: true,
-    analytics: true, duplicates: true, bookmarks: true,
-    redaction: true, compliance: true, ai_analysis: true, watch_folder: true,
+    analytics: true, duplicates: true, bookmarks: true, redaction: true,
+    compliance: true, ai_analysis: true, watch_folder: true,
     custom_patterns: true, profiles: true, pdf_audit: true, regex_playground: true,
-    batch: false, image_redact: false, schedules: false,
-    audio: false, api_server: false, rbac: false, custom_frameworks: false,
+    batch: true, schedules: true, doc_compare: true, scan_stats: true,
+    image_redact: false, audio: false, api_server: false, rbac: false, custom_frameworks: false,
   },
   3: {
     search: true, content_search: true, pii_filters: 18, dashboard: true,
-    analytics: true, duplicates: true, bookmarks: true,
-    redaction: true, compliance: true, ai_analysis: true, watch_folder: true,
+    analytics: true, duplicates: true, bookmarks: true, redaction: true,
+    compliance: true, ai_analysis: true, watch_folder: true,
     custom_patterns: true, profiles: true, pdf_audit: true, regex_playground: true,
     batch: true, image_redact: true, schedules: true, doc_compare: true, scan_stats: true,
-    max_seats: 5,
-    audio: false, api_server: false, rbac: false, custom_frameworks: false,
+    api_server: true, custom_frameworks: true, audit_export: true,
+    max_seats: 10,
+    audio: false, rbac: false,
   },
   4: {
     search: true, content_search: true, pii_filters: 18, dashboard: true,
-    analytics: true, duplicates: true, bookmarks: true,
-    redaction: true, compliance: true, ai_analysis: true, watch_folder: true,
+    analytics: true, duplicates: true, bookmarks: true, redaction: true,
+    compliance: true, ai_analysis: true, watch_folder: true,
     custom_patterns: true, profiles: true, pdf_audit: true, regex_playground: true,
     batch: true, image_redact: true, schedules: true, doc_compare: true, scan_stats: true,
     audio: true, api_server: true, rbac: true, custom_frameworks: true, audit_export: true,
+    whitelabel: true, webhooks: true, encrypted_exports: true, compliance_trends: true,
+    exec_reports: true, multi_folder: true,
     max_seats: 25,
   },
 };
@@ -145,7 +156,7 @@ export default async function handler(req, res) {
       tier: data.tier_level,
       tier_name: TIER_NAMES[data.tier_level],
       customer_email: data.customer_email,
-      features: TIER_FEATURES[data.tier_level] || TIER_FEATURES[1],
+      features: TIER_FEATURES[data.tier_level] || TIER_FEATURES[0],
       activated_devices: currentDevices.length + (device_id && !currentDevices.includes(device_id) ? 1 : 0),
       max_devices: maxDevices,
     });

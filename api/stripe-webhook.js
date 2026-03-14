@@ -7,25 +7,27 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY);
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// ── 4-Tier Pricing: Map Stripe Price IDs → Tier Levels ──────────────────────
+// ── 5-Tier Pricing: Map Stripe Price IDs → Tier Levels ──────────────────────
 // Set these as Vercel environment variables:
-// STRIPE_PRICE_SOLO, STRIPE_PRICE_PROFESSIONAL, STRIPE_PRICE_BUSINESS, STRIPE_PRICE_ENTERPRISE
+// STRIPE_PRICE_STARTER, STRIPE_PRICE_SOLO, STRIPE_PRICE_PROFESSIONAL, STRIPE_PRICE_BUSINESS, STRIPE_PRICE_ENTERPRISE
 const PRICE_TO_TIER = {
+  [process.env.STRIPE_PRICE_STARTER]:      0, // Starter £29/mo
   [process.env.STRIPE_PRICE_SOLO]:         1, // Solo £99/mo
   [process.env.STRIPE_PRICE_PROFESSIONAL]: 2, // Professional £249/mo
   [process.env.STRIPE_PRICE_BUSINESS]:     3, // Business £499/mo
   [process.env.STRIPE_PRICE_ENTERPRISE]:   4, // Enterprise £999/mo
 };
 
-const TIER_NAMES  = { 1: "Solo", 2: "Professional", 3: "Business", 4: "Enterprise" };
-const TIER_PRICES = { 1: "£99", 2: "£249", 3: "£499", 4: "£999" };
-const TIER_DEVICES = { 1: 1, 2: 3, 3: 5, 4: 25 };
+const TIER_NAMES  = { 0: "Starter", 1: "Solo", 2: "Professional", 3: "Business", 4: "Enterprise" };
+const TIER_PRICES = { 0: "£29", 1: "£99", 2: "£249", 3: "£499", 4: "£999" };
+const TIER_DEVICES = { 0: 1, 1: 1, 2: 3, 3: 10, 4: 25 };
 
 const TIER_FEATURES = {
-  1: ["File & Content Search", "6 PII Filters", "Dashboard & Analytics", "Duplicate Detection", "Bookmarks"],
-  2: ["All 15 PII Filters", "Text Redaction", "Custom Patterns & Profiles", "Compliance Center (7 Frameworks)", "PDF Audit Certificates", "Watch Folder", "AI Analysis", "Regex Playground"],
-  3: ["Image Redaction", "Batch Processing", "Document Compare", "Scan Statistics", "Scheduled Scans", "5 Seats / Devices"],
-  4: ["Audio Transcription & PII", "REST API Server", "RBAC & Team Management (25 Seats)", "Custom Compliance Frameworks", "Advanced Audit Trail", "Priority Support"],
+  0: ["File & Content Search", "6 PII Filters", "Text Redaction", "Dashboard & Analytics", "Duplicate Detection", "Bookmarks"],
+  1: ["All 15 PII Filters", "Custom Patterns & Profiles", "Watch Folder", "Compliance Center (7 Frameworks)", "PDF Audit Certificates", "AI Analysis", "Regex Playground"],
+  2: ["Batch Processing", "Document Compare", "Scan Statistics", "Scheduled Scans", "3 Devices"],
+  3: ["Image Redaction", "REST API Server", "Custom Compliance Frameworks", "Audit Trail Export", "10 Seats / Devices"],
+  4: ["Audio Transcription & PII", "RBAC & Team Management (25 Seats)", "White-Label Audit Certificates", "Webhook Notifications", "Encrypted Audit Exports", "Compliance Trend Dashboard", "Executive Summary Reports", "Multi-Folder Scanning"],
 };
 
 // ── License Key Generator: AL-XXXX-XXXX-XXXX-XXXX ──────────────────────────
@@ -203,7 +205,7 @@ export default async function handler(req, res) {
 
         const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
         const priceId = lineItems.data[0]?.price?.id || "";
-        const tierLevel = PRICE_TO_TIER[priceId] ?? 1;
+        const tierLevel = PRICE_TO_TIER[priceId] ?? 0;
         const licenseKey = generateLicenseKey();
 
         const { error: dbError } = await supabase.from("license_keys").insert({
@@ -251,7 +253,7 @@ export default async function handler(req, res) {
 
         // Issue license if missing
         const customer = await stripe.customers.retrieve(stripeCustomerId);
-        const tierLevel = PRICE_TO_TIER[priceId] ?? 1;
+        const tierLevel = PRICE_TO_TIER[priceId] ?? 0;
         const licenseKey = generateLicenseKey();
 
         await supabase.from("license_keys").insert({
@@ -277,7 +279,7 @@ export default async function handler(req, res) {
         const sub = event.data.object;
         const priceId = sub.items.data[0]?.price?.id || "";
         const stripeCustomerId = sub.customer;
-        const newTier = PRICE_TO_TIER[priceId] ?? 1;
+        const newTier = PRICE_TO_TIER[priceId] ?? 0;
 
         const { error } = await supabase
           .from("license_keys")
