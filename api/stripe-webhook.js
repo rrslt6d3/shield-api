@@ -12,22 +12,28 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 // STRIPE_PRICE_STARTER, STRIPE_PRICE_SOLO, STRIPE_PRICE_PROFESSIONAL, STRIPE_PRICE_BUSINESS, STRIPE_PRICE_ENTERPRISE
 const PRICE_TO_TIER = {
   [process.env.STRIPE_PRICE_STARTER]:      0, // Starter £29/mo
-  [process.env.STRIPE_PRICE_SOLO]:         1, // Solo £99/mo
-  [process.env.STRIPE_PRICE_PROFESSIONAL]: 2, // Professional £249/mo
-  [process.env.STRIPE_PRICE_BUSINESS]:     3, // Business £499/mo
-  [process.env.STRIPE_PRICE_ENTERPRISE]:   4, // Enterprise £999/mo
+  [process.env.STRIPE_PRICE_SOLO]:         1, // Solo £149/mo
+  [process.env.STRIPE_PRICE_PROFESSIONAL]: 2, // Professional £349/mo
+  [process.env.STRIPE_PRICE_BUSINESS]:     3, // Business £749/mo
+  [process.env.STRIPE_PRICE_ENTERPRISE]:   4, // Enterprise £1,499/mo
+  // Annual price IDs
+  [process.env.STRIPE_PRICE_STARTER_ANNUAL]:      0,
+  [process.env.STRIPE_PRICE_SOLO_ANNUAL]:         1,
+  [process.env.STRIPE_PRICE_PROFESSIONAL_ANNUAL]: 2,
+  [process.env.STRIPE_PRICE_BUSINESS_ANNUAL]:     3,
+  [process.env.STRIPE_PRICE_ENTERPRISE_ANNUAL]:   4,
 };
 
 const TIER_NAMES  = { 0: "Starter", 1: "Solo", 2: "Professional", 3: "Business", 4: "Enterprise" };
-const TIER_PRICES = { 0: "£29", 1: "£99", 2: "£249", 3: "£499", 4: "£999" };
+const TIER_PRICES = { 0: "£29", 1: "£149", 2: "£349", 3: "£749", 4: "£1,499" };
 const TIER_DEVICES = { 0: 1, 1: 1, 2: 3, 3: 10, 4: 25 };
 
 const TIER_FEATURES = {
   0: ["File & Content Search", "6 PII Filters", "Text Redaction", "Dashboard & Analytics", "Duplicate Detection", "Bookmarks"],
-  1: ["All 15 PII Filters", "Custom Patterns & Profiles", "Watch Folder", "Compliance Center (7 Frameworks)", "PDF Audit Certificates", "AI Analysis", "Regex Playground"],
+  1: ["All 15+ PII Filters", "Custom Patterns & Profiles", "Watch Folder", "Compliance Center (45+ Frameworks)", "PDF Audit Certificates", "AI Analysis", "Regex Playground"],
   2: ["Batch Processing", "Document Compare", "Scan Statistics", "Scheduled Scans", "3 Devices"],
-  3: ["Image Redaction", "REST API Server", "Custom Compliance Frameworks", "Audit Trail Export", "10 Seats / Devices"],
-  4: ["Audio Transcription & PII", "RBAC & Team Management (25 Seats)", "White-Label Audit Certificates", "Webhook Notifications", "Encrypted Audit Exports", "Compliance Trend Dashboard", "Executive Summary Reports", "Multi-Folder Scanning"],
+  3: ["Image Redaction", "REST API Server", "DSAR Automation", "Breach Simulation", "Compliance Reports (SOC 2, ISO 27001, NIST, GDPR Art.30)", "DPIA Wizard", "ROPA", "Gap Analysis", "Cross-Reference Scanning", "Incident Response", "Remediation Tracking", "Compliance Calendar", "One-Click Compliance Package", "10 Seats / Devices"],
+  4: ["Audio Transcription & PII", "RBAC & Team Management (25 Seats)", "Executive Dashboard", "GenAI Data Protection (Clipboard Guard)", "White-Label Audit Certificates", "Webhook Notifications", "Encrypted Audit Exports", "Multi-Folder Scanning", "Scheduled PDF Reports"],
 };
 
 // ── License Key Generator: AL-XXXX-XXXX-XXXX-XXXX ──────────────────────────
