@@ -312,7 +312,14 @@ export default async function handler(req, res) {
 
         const lineItems = await stripe.checkout.sessions.listLineItems(session.id);
         const priceId = lineItems.data[0]?.price?.id || "";
-        const tierLevel = PRICE_TO_TIER[priceId] ?? 0;
+
+        // Skip non-Lens checkouts (e.g. AgentForge plan upgrades on shared Stripe account)
+        if (!(priceId in PRICE_TO_TIER)) {
+          console.log(`Skipping non-Lens checkout: price=${priceId}, session=${session.id}`);
+          break;
+        }
+
+        const tierLevel = PRICE_TO_TIER[priceId];
         const licenseKey = generateLicenseKey();
 
         const { error: dbError } = await supabase.from("license_keys").insert({
@@ -345,6 +352,12 @@ export default async function handler(req, res) {
         const sub = event.data.object;
         const priceId = sub.items.data[0]?.price?.id || "";
         const stripeCustomerId = sub.customer;
+
+        // Skip non-Lens subscriptions (e.g. AgentForge plans on shared Stripe account)
+        if (!(priceId in PRICE_TO_TIER)) {
+          console.log(`Skipping non-Lens subscription: price=${priceId}, customer=${stripeCustomerId}`);
+          break;
+        }
 
         // Check if license already exists (from checkout.session.completed)
         const { data: existing } = await supabase
@@ -389,7 +402,14 @@ export default async function handler(req, res) {
         const sub = event.data.object;
         const priceId = sub.items.data[0]?.price?.id || "";
         const stripeCustomerId = sub.customer;
-        const newTier = PRICE_TO_TIER[priceId] ?? 0;
+
+        // Skip non-Lens subscription updates
+        if (!(priceId in PRICE_TO_TIER)) {
+          console.log(`Skipping non-Lens subscription update: price=${priceId}, customer=${stripeCustomerId}`);
+          break;
+        }
+
+        const newTier = PRICE_TO_TIER[priceId];
 
         const { error } = await supabase
           .from("license_keys")
