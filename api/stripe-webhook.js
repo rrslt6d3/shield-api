@@ -431,6 +431,13 @@ export default async function handler(req, res) {
         const sub = event.data.object;
         const stripeCustomerId = sub.customer;
 
+        // Skip non-Lens subscription cancellations
+        const cancelPriceId = sub.items?.data?.[0]?.price?.id || "";
+        if (cancelPriceId && !(cancelPriceId in PRICE_TO_TIER)) {
+          console.log(`Skipping non-Lens cancellation: price=${cancelPriceId}, customer=${stripeCustomerId}`);
+          break;
+        }
+
         const { data, error } = await supabase
           .from("license_keys")
           .update({
@@ -455,6 +462,13 @@ export default async function handler(req, res) {
         const invoice = event.data.object;
         const stripeCustomerId = invoice.customer;
         const attemptCount = invoice.attempt_count || 1;
+
+        // Skip non-Lens payment failures
+        const failPriceId = invoice.lines?.data?.[0]?.price?.id || "";
+        if (failPriceId && !(failPriceId in PRICE_TO_TIER)) {
+          console.log(`Skipping non-Lens payment failure: price=${failPriceId}, customer=${stripeCustomerId}`);
+          break;
+        }
 
         if (attemptCount >= 3) {
           await supabase
@@ -482,6 +496,13 @@ export default async function handler(req, res) {
       case "invoice.paid": {
         const invoice = event.data.object;
         const stripeCustomerId = invoice.customer;
+
+        // Skip non-Lens invoice payments
+        const paidPriceId = invoice.lines?.data?.[0]?.price?.id || "";
+        if (paidPriceId && !(paidPriceId in PRICE_TO_TIER)) {
+          console.log(`Skipping non-Lens invoice paid: price=${paidPriceId}, customer=${stripeCustomerId}`);
+          break;
+        }
 
         await supabase
           .from("license_keys")
